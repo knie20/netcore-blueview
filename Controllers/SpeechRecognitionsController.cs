@@ -1,4 +1,5 @@
 ﻿using System;
+using netcore_blueview.Services;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,10 +9,30 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace netcore_blueview.Controllers
 {
+    
+
     [Route("api/speech/[controller]")]
     [ApiController]
     public class SpeechRecognitionsController : Controller
     {
+        SpeechRecognitionsService service = new SpeechRecognitionsService();
+
+        // POST: api/<controller>
+        [HttpPost]
+        public IActionResult AddSpeech([FromBody]string value)
+        {
+            try
+            {
+                service.addSpeech();
+            } catch (Exception ex)
+            {
+                return NotFound();
+            }
+            return Ok(value);
+        }
+
+
+
         // GET: api/<controller>
         [HttpGet]
         public IEnumerable<string> Get()
