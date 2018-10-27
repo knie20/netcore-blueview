@@ -7,15 +7,12 @@ namespace netcore_blueview.Models
 {
     public class WordInfo
     {
+        public int WordInfoId { get; set; }
         private double StartTime { get; set; }
         private double EndTime { get; set; }
         private string Word { get; set; }
 
-        public WordInfo(double startTime, double endTime, string word)
-        {
-            StartTime = startTime;
-            EndTime = endTime;
-            Word = word ?? throw new ArgumentNullException(nameof(word));
-        }
+        public int SpeechRecognitionAlternativeId { get; set; }
+        public SpeechRecognitionAlternative SpeechRecognitionAlternative { get; set; }
     }
 }
