@@ -7,15 +7,13 @@ namespace netcore_blueview.Models
 {
     public class SpeechRecognitionAlternative
     {
-        private string Transcript { get; set; }
+        public int SpeechRecognitionAlternativeId { get; set; }
+        public string Transcript { get; set; }
         private float Confidence { get; set; }
-        private WordInfo[] Words { get; }
 
-        public SpeechRecognitionAlternative(string transcript, float confidence, WordInfo[] words)
-        {
-            Transcript = transcript ?? throw new ArgumentNullException(nameof(transcript));
-            Confidence = confidence;
-            Words = words ?? throw new ArgumentNullException(nameof(words));
-        }
+        public int SpeechRecognitionId { get; set; }
+        public SpeechRecognition SpeechRecognition { get; set; }
+
+        public List<WordInfo> WordInfos { get; set; }
     }
 }
