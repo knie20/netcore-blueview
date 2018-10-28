@@ -8,10 +8,13 @@ namespace netcore_blueview.Models
         public int AlternativeId { get; set; }
 
         public string Transcript { get; set; }
-        private float Confidence { get; set; }
+        public float Confidence { get; set; }
 
         public int SpeechRecognitionResultId { get; set; }
         public SpeechRecognitionResult SpeechRecognitionResult { get; set; }
+
+        public int CrimeReportId { get; set; }
+        public CrimeReport CrimeReport { get; set; }
 
         public List<WordInfo> WordInfos { get; set; }
     }
