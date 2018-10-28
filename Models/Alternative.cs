@@ -9,6 +9,7 @@ namespace netcore_blueview.Models
 
         public string Transcript { get; set; }
         public float Confidence { get; set; }
+        public int Rank { get; set; }
 
         public int SpeechRecognitionResultId { get; set; }
         public SpeechRecognitionResult SpeechRecognitionResult { get; set; }
