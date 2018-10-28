@@ -39,11 +39,11 @@ namespace netcore_blueview.Services
                     _response.SpeechRecognitionResults.Add(_result);
                 }
                 
-                if(String.IsNullOrEmpty(response["timeStamp"].ToString())){
+                if(!String.IsNullOrEmpty(response["timeStamp"].ToString())){
                     _response.StartTime = response.Value<DateTime>("timeStamp");
                 }
                 
-                if(String.IsNullOrEmpty(response["audioUrl"].ToString())){
+                if(!String.IsNullOrEmpty(response["audioUrl"].ToString())){
                     _response.AudioUrl = response.Value<string>("audioUrl");
                 }
 
