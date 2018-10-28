@@ -10,7 +10,7 @@ namespace netcore_blueview.Models
         public string CrimeCode { get; set; }
         public string Location { get; set; }
 
-        public int SpeechRecognitionResponseId { get; set; }
-        public SpeechRecognitionResponse SpeechRecognitionResponse { get; set; }
+        public int AlternativeId { get; set; }
+        public Alternative Alternative { get; set; }
     }
 }

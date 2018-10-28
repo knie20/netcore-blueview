@@ -11,6 +11,6 @@ namespace netcore_blueview.Models
         public int SpeechRecognitionResponseId { get; set; }
         public SpeechRecognitionResponse SpeechRecognitionResponse { get; set; }
 
-        public List<Alternative> SpeechRecognitionAlternatives { get; set; }
+        public List<Alternative> Alternatives { get; set; }
     }
 }
