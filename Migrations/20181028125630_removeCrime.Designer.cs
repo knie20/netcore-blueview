@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using netcore_blueview.Models;
 
 namespace netcore_blueview.Migrations
 {
     [DbContext(typeof(DAO))]
-    partial class DAOModelSnapshot : ModelSnapshot
+    [Migration("20181028125630_removeCrime")]
+    partial class removeCrime
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

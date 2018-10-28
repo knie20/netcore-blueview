@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace netcore_blueview.Models
 {
@@ -8,7 +9,8 @@ namespace netcore_blueview.Models
         public int AlternativeId { get; set; }
 
         public string Transcript { get; set; }
-        private float Confidence { get; set; }
+        public float Confidence { get; set; }
+        public int Rank { get; set; }
 
         public int SpeechRecognitionResultId { get; set; }
         public SpeechRecognitionResult SpeechRecognitionResult { get; set; }
