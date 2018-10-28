@@ -9,6 +9,7 @@ namespace netcore_blueview.Models
         public DbSet<SpeechRecognition> SpeechRecognitions { get; set; }
         public DbSet<SpeechRecognitionAlternative> SpeechRecognitionAlternatives { get; set; }
         public DbSet<WordInfo> WordInfos { get; set; }
+        public DbSet<CrimeReport> CrimeReports { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
