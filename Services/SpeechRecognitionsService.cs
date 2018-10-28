@@ -10,38 +10,46 @@ namespace netcore_blueview.Services
     public class SpeechRecognitionsService
     {
         public void AddSpeech(string value) {
-            SpeechRecognitionResponse sr_response = new SpeechRecognitionResponse();
+            SpeechRecognitionResponse _response = new SpeechRecognitionResponse();
+            _response.SpeechRecognitionResults = new List<SpeechRecognitionResult>();
+            SpeechRecognitionResult _result;
+            Alternative _alternative;
 
             using (var db = new DAO())
             {
+                int rank = 1;
 
-                var objects = JObject.Parse(value);
-                IEnumerator<KeyValuePair<string, JToken>> objectsEnum = objects.GetEnumerator();
-                foreach (JObject result in objectsEnum.Current.Value) {
-                    SpeechRecognitionResult sr_result = new SpeechRecognitionResult();
-                    sr_response.SpeechRecognitionResults.Add(sr_result);
-                    IEnumerator<KeyValuePair<string, JToken>> resultEnum = result.GetEnumerator();
-                    int rank = 0;
-                    foreach (JObject alternative in resultEnum.Current.Value) {
-                        Alternative sr_alternative = new Alternative();
-                        sr_alternative.Transcript = (string) alternative["transcript"];
-                        sr_alternative.Confidence = (float) alternative["confidence"];
-                        sr_alternative.Rank = rank;
-                        db.Alternatives.Add(sr_alternative);
+                var response = JObject.Parse(value);
+                JArray results = response.Value<JArray>("results");
+                foreach (JObject result in results) {
+                    _result = new SpeechRecognitionResult();
+                    _result.Alternatives = new List<Alternative>();
+                    JArray alternatives = result.Value<JArray>("alternatives");
+                    foreach (JObject alternative in alternatives) {
+                        _alternative = new Alternative();
+                        _alternative.Transcript = (string) alternative["transcript"];
+                        _alternative.Confidence = (float) alternative["confidence"];
+                        _alternative.Rank = rank;
+                        db.Alternatives.Add(_alternative);
+                        _result.Alternatives.Add(_alternative);
 
                         rank++;
                     }
-                    db.SpeechRecognitionResults.Add(sr_result);
+                    db.SpeechRecognitionResults.Add(_result);
+                    _response.SpeechRecognitionResults.Add(_result);
+                }
+                
+                if(String.IsNullOrEmpty(response["timeStamp"].ToString())){
+                    _response.StartTime = response.Value<DateTime>("timeStamp");
+                }
+                
+                if(String.IsNullOrEmpty(response["audioUrl"].ToString())){
+                    _response.AudioUrl = response.Value<string>("audioUrl");
                 }
 
-                objectsEnum.MoveNext();
-                sr_response.AudioUrl = (string) objectsEnum.Current.Value;
+                db.SpeechRecognitionResponses.Add(_response);
 
-                objectsEnum.MoveNext();
-                sr_response.StartTime = (DateTime) objectsEnum.Current.Value;
-
-                db.SpeechRecognitionResponses.Add(sr_response);
-
+                db.SaveChanges();
             }
         }
     }

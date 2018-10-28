@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using netcore_blueview.Services;
 using netcore_blueview.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -27,11 +28,12 @@ namespace netcore_blueview.Controllers
             try
             {
                 service.AddSpeech(value);
+
+                return Ok("Successfully added Speech");
             } catch (Exception ex)
             {
                 return NotFound(ex.ToString());
             }
-            return Ok("Successfully added Speech");
         }
 
         //GET: api/speech/:id

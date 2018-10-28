@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using netcore_blueview.Models;
 
 namespace netcore_blueview.Migrations
 {
     [DbContext(typeof(DAO))]
-    partial class DAOModelSnapshot : ModelSnapshot
+    [Migration("20181028122707_addForeignKeyConstraint")]
+    partial class addForeignKeyConstraint
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,6 +29,8 @@ namespace netcore_blueview.Migrations
 
                     b.Property<float>("Confidence");
 
+                    b.Property<int>("CrimeReportId");
+
                     b.Property<int>("Rank");
 
                     b.Property<int>("SpeechRecognitionResultId");
@@ -35,9 +39,29 @@ namespace netcore_blueview.Migrations
 
                     b.HasKey("AlternativeId");
 
+                    b.HasIndex("CrimeReportId")
+                        .IsUnique();
+
                     b.HasIndex("SpeechRecognitionResultId");
 
                     b.ToTable("Alternatives");
+                });
+
+            modelBuilder.Entity("netcore_blueview.Models.CrimeReport", b =>
+                {
+                    b.Property<int>("CrimeReportId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AlternativeId");
+
+                    b.Property<string>("CrimeCode");
+
+                    b.Property<string>("Location");
+
+                    b.HasKey("CrimeReportId");
+
+                    b.ToTable("CrimeReports");
                 });
 
             modelBuilder.Entity("netcore_blueview.Models.SpeechRecognitionResponse", b =>
@@ -87,6 +111,11 @@ namespace netcore_blueview.Migrations
 
             modelBuilder.Entity("netcore_blueview.Models.Alternative", b =>
                 {
+                    b.HasOne("netcore_blueview.Models.CrimeReport", "CrimeReport")
+                        .WithOne("Alternative")
+                        .HasForeignKey("netcore_blueview.Models.Alternative", "CrimeReportId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("netcore_blueview.Models.SpeechRecognitionResult", "SpeechRecognitionResult")
                         .WithMany("Alternatives")
                         .HasForeignKey("SpeechRecognitionResultId")
