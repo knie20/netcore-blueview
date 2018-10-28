@@ -7,7 +7,7 @@ namespace netcore_blueview.Services
 {
     public class SpeechRecognitionsService
     {
-        public void addSpeech() {
+        public void AddSpeech(string value) {
            
         }
     }

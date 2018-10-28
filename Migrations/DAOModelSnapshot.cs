@@ -19,6 +19,23 @@ namespace netcore_blueview.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("netcore_blueview.Models.Alternative", b =>
+                {
+                    b.Property<int>("AlternativeId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("SpeechRecognitionResultId");
+
+                    b.Property<string>("Transcript");
+
+                    b.HasKey("AlternativeId");
+
+                    b.HasIndex("SpeechRecognitionResultId");
+
+                    b.ToTable("Alternatives");
+                });
+
             modelBuilder.Entity("netcore_blueview.Models.CrimeReport", b =>
                 {
                     b.Property<int>("CrimeReportId")
@@ -29,18 +46,18 @@ namespace netcore_blueview.Migrations
 
                     b.Property<string>("Location");
 
-                    b.Property<int>("SpeechRecognitionId");
+                    b.Property<int>("SpeechRecognitionResponseId");
 
                     b.HasKey("CrimeReportId");
 
-                    b.HasIndex("SpeechRecognitionId");
+                    b.HasIndex("SpeechRecognitionResponseId");
 
                     b.ToTable("CrimeReports");
                 });
 
-            modelBuilder.Entity("netcore_blueview.Models.SpeechRecognition", b =>
+            modelBuilder.Entity("netcore_blueview.Models.SpeechRecognitionResponse", b =>
                 {
-                    b.Property<int>("SpeechRecognitionId")
+                    b.Property<int>("SpeechRecognitionResponseId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -48,26 +65,24 @@ namespace netcore_blueview.Migrations
 
                     b.Property<DateTime>("StartTime");
 
-                    b.HasKey("SpeechRecognitionId");
+                    b.HasKey("SpeechRecognitionResponseId");
 
-                    b.ToTable("SpeechRecognitions");
+                    b.ToTable("SpeechRecognitionResponses");
                 });
 
-            modelBuilder.Entity("netcore_blueview.Models.SpeechRecognitionAlternative", b =>
+            modelBuilder.Entity("netcore_blueview.Models.SpeechRecognitionResult", b =>
                 {
-                    b.Property<int>("SpeechRecognitionAlternativeId")
+                    b.Property<int>("SpeechRecognitionResultId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("SpeechRecognitionId");
+                    b.Property<int>("SpeechRecognitionResponseId");
 
-                    b.Property<string>("Transcript");
+                    b.HasKey("SpeechRecognitionResultId");
 
-                    b.HasKey("SpeechRecognitionAlternativeId");
+                    b.HasIndex("SpeechRecognitionResponseId");
 
-                    b.HasIndex("SpeechRecognitionId");
-
-                    b.ToTable("SpeechRecognitionAlternatives");
+                    b.ToTable("SpeechRecognitionResults");
                 });
 
             modelBuilder.Entity("netcore_blueview.Models.WordInfo", b =>
@@ -76,36 +91,44 @@ namespace netcore_blueview.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("SpeechRecognitionAlternativeId");
+                    b.Property<int>("AlternativeId");
 
                     b.HasKey("WordInfoId");
 
-                    b.HasIndex("SpeechRecognitionAlternativeId");
+                    b.HasIndex("AlternativeId");
 
                     b.ToTable("WordInfos");
                 });
 
-            modelBuilder.Entity("netcore_blueview.Models.CrimeReport", b =>
+            modelBuilder.Entity("netcore_blueview.Models.Alternative", b =>
                 {
-                    b.HasOne("netcore_blueview.Models.SpeechRecognition", "SpeechRecognition")
-                        .WithMany()
-                        .HasForeignKey("SpeechRecognitionId")
+                    b.HasOne("netcore_blueview.Models.SpeechRecognitionResult", "SpeechRecognitionResult")
+                        .WithMany("SpeechRecognitionAlternatives")
+                        .HasForeignKey("SpeechRecognitionResultId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("netcore_blueview.Models.SpeechRecognitionAlternative", b =>
+            modelBuilder.Entity("netcore_blueview.Models.CrimeReport", b =>
                 {
-                    b.HasOne("netcore_blueview.Models.SpeechRecognition", "SpeechRecognition")
-                        .WithMany("SpeechRecognitionAlternatives")
-                        .HasForeignKey("SpeechRecognitionId")
+                    b.HasOne("netcore_blueview.Models.SpeechRecognitionResponse", "SpeechRecognitionResponse")
+                        .WithMany()
+                        .HasForeignKey("SpeechRecognitionResponseId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("netcore_blueview.Models.SpeechRecognitionResult", b =>
+                {
+                    b.HasOne("netcore_blueview.Models.SpeechRecognitionResponse", "SpeechRecognitionResponse")
+                        .WithMany("SpeechRecognitionResults")
+                        .HasForeignKey("SpeechRecognitionResponseId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("netcore_blueview.Models.WordInfo", b =>
                 {
-                    b.HasOne("netcore_blueview.Models.SpeechRecognitionAlternative", "SpeechRecognitionAlternative")
+                    b.HasOne("netcore_blueview.Models.Alternative", "Alternative")
                         .WithMany("WordInfos")
-                        .HasForeignKey("SpeechRecognitionAlternativeId")
+                        .HasForeignKey("AlternativeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

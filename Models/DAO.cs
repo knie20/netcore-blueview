@@ -6,8 +6,9 @@ namespace netcore_blueview.Models
 {
     public class DAO: DbContext
     {
-        public DbSet<SpeechRecognition> SpeechRecognitions { get; set; }
-        public DbSet<SpeechRecognitionAlternative> SpeechRecognitionAlternatives { get; set; }
+        public DbSet<SpeechRecognitionResponse> SpeechRecognitionResponses { get; set; }
+        public DbSet<SpeechRecognitionResult> SpeechRecognitionResults { get; set; }
+        public DbSet<Alternative> Alternatives { get; set; }
         public DbSet<WordInfo> WordInfos { get; set; }
         public DbSet<CrimeReport> CrimeReports { get; set; }
 

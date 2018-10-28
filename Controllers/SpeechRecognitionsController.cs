@@ -1,8 +1,7 @@
 ﻿using System;
 using netcore_blueview.Services;
+using netcore_blueview.Models;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -17,18 +16,18 @@ namespace netcore_blueview.Controllers
     {
         SpeechRecognitionsService service = new SpeechRecognitionsService();
 
-        // POST: api/<controller>
+        // POST: api/speech/
         [HttpPost]
         public IActionResult AddSpeech([FromBody]string value)
         {
             try
             {
-                service.addSpeech();
+                service.AddSpeech(value);
             } catch (Exception ex)
             {
                 return NotFound();
             }
-            return Ok(value);
+            return Ok("Successfully added Speech");
         }
 
 
