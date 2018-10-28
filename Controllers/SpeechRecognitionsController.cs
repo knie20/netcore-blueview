@@ -29,28 +29,32 @@ namespace netcore_blueview.Controllers
                 service.AddSpeech(value);
             } catch (Exception ex)
             {
-                return NotFound();
+                return NotFound(ex.ToString());
             }
             return Ok("Successfully added Speech");
         }
 
         //GET: api/speech/:id
         [HttpGet("{id}")]
-        public SpeechRecognitionResponse getResponseDetails(int id)
+        public IActionResult getResponseDetails(int id)
         {
-            var response = SpeechRecognitionResponseService.GetResponseById(id);
-            foreach (SpeechRecognitionResult result in response.SpeechRecognitionResults)
-            {
-                result.Alternatives = (List<Alternative>) AlternativeService.GetAlternativesByResult(result.SpeechRecognitionResultId);
-            }
+            try{
+                var response = SpeechRecognitionResponseService.GetResponseById(id);
+                foreach (SpeechRecognitionResult result in response.SpeechRecognitionResults)
+                {
+                    result.Alternatives = (List<Alternative>) AlternativeService.GetAlternativesByResult(result.SpeechRecognitionResultId);
+                }
 
-            return response;
+                return Ok(response);
+            } catch(Exception ex) {
+                return NotFound(ex.ToString());
+            }
         }
 
 
         // GET: api/speech/all
         [HttpGet("all")]
-        public IEnumerable<SpeechRecognitionResponse> SearchResponses(
+        public IActionResult SearchResponses(
             [FromQuery]DateTime timeFrom, 
             [FromQuery]DateTime timeTo, 
             [FromQuery]string transcript, 
@@ -59,43 +63,47 @@ namespace netcore_blueview.Controllers
             [FromQuery]int pageIndex
             )
         {
-            var responses = SpeechRecognitionResponseService.SearchResponses(timeFrom, timeTo, pageSize, pageIndex);
+            try{
+                var responses = SpeechRecognitionResponseService.SearchResponses(timeFrom, timeTo, pageSize, pageIndex);
 
-            List<int> responseIds = new List<int>();
-            foreach (SpeechRecognitionResponse response in responses)
-            {
-                responseIds.Add(response.SpeechRecognitionResponseId);
-            }
+                List<int> responseIds = new List<int>();
+                foreach (SpeechRecognitionResponse response in responses)
+                {
+                    responseIds.Add(response.SpeechRecognitionResponseId);
+                }
 
-            var results = SpeechRecognitionResultService.GetResults(responseIds);
+                var results = SpeechRecognitionResultService.GetResults(responseIds);
 
-            List<int> resultIds = new List<int>();
-            foreach (SpeechRecognitionResult result in results)
-            {
-                resultIds.Add(result.SpeechRecognitionResultId);
-            }
-
-            var alternatives = AlternativeService.SearchAlternatives(transcript, resultIds, minConfidence);
-
-            foreach (SpeechRecognitionResponse response in responses)
-            {
+                List<int> resultIds = new List<int>();
                 foreach (SpeechRecognitionResult result in results)
                 {
-                    if(response.SpeechRecognitionResponseId == result.SpeechRecognitionResponseId)
+                    resultIds.Add(result.SpeechRecognitionResultId);
+                }
+
+                var alternatives = AlternativeService.SearchAlternatives(transcript, resultIds, minConfidence);
+
+                foreach (SpeechRecognitionResponse response in responses)
+                {
+                    foreach (SpeechRecognitionResult result in results)
                     {
-                        response.SpeechRecognitionResults.Add(result);
-                        foreach (Alternative alternative in alternatives)
+                        if(response.SpeechRecognitionResponseId == result.SpeechRecognitionResponseId)
                         {
-                            if(result.SpeechRecognitionResultId == alternative.SpeechRecognitionResultId)
+                            response.SpeechRecognitionResults.Add(result);
+                            foreach (Alternative alternative in alternatives)
                             {
-                                result.Alternatives.Add(alternative);
+                                if(result.SpeechRecognitionResultId == alternative.SpeechRecognitionResultId)
+                                {
+                                    result.Alternatives.Add(alternative);
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            return responses;
+                return Ok(responses);
+            } catch (Exception ex) {
+                return NotFound(ex.ToString());
+            }
         }
 
     }
