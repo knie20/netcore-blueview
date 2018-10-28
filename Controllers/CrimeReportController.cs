@@ -14,10 +14,17 @@ namespace netcore_blueview.Controllers
     public class CrimeReportController : Controller
     {
         [HttpGet]
-        [Route("/GetReport")]
-        public void GetReport()
+        [Route("/GetReportTable")]
+        public void GetReportTable()
         {
             
+        }
+
+        [HttpGet]
+        [Route("/GetReportDetail/{id}")]
+        public void GetReportDetail(int id)
+        {
+
         }
     }
 }

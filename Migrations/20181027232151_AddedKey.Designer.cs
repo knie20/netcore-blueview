@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using netcore_blueview.Models;
 
 namespace netcore_blueview.Migrations
 {
     [DbContext(typeof(DAO))]
-    partial class DAOModelSnapshot : ModelSnapshot
+    [Migration("20181027232151_AddedKey")]
+    partial class AddedKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,15 +27,17 @@ namespace netcore_blueview.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("AudioUrl");
+
                     b.Property<string>("CrimeCode");
 
                     b.Property<string>("Location");
 
-                    b.Property<int>("SpeechRecognitionId");
+                    b.Property<DateTime>("StartTime");
+
+                    b.Property<string>("Transcript");
 
                     b.HasKey("CrimeReportId");
-
-                    b.HasIndex("SpeechRecognitionId");
 
                     b.ToTable("CrimeReports");
                 });
@@ -83,14 +87,6 @@ namespace netcore_blueview.Migrations
                     b.HasIndex("SpeechRecognitionAlternativeId");
 
                     b.ToTable("WordInfos");
-                });
-
-            modelBuilder.Entity("netcore_blueview.Models.CrimeReport", b =>
-                {
-                    b.HasOne("netcore_blueview.Models.SpeechRecognition", "SpeechRecognition")
-                        .WithMany()
-                        .HasForeignKey("SpeechRecognitionId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("netcore_blueview.Models.SpeechRecognitionAlternative", b =>
